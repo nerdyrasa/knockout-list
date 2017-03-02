@@ -1,0 +1,20 @@
+{
+  "places": [
+    {
+      "type": "food",
+      "name": "Graze",
+      "location": {
+        "lat": 43.075617,
+        "lng": -89.382206
+      }
+    },
+    {
+      "type": "fun",
+      "name": "Madison Children's Museum",
+      "location": {
+        "lat": 43.076674,
+        "lng": -89.384438
+      }
+    }
+  ]
+}
