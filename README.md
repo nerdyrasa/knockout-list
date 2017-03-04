@@ -13,3 +13,7 @@
 9. Pass the view model to ko.applyBindings() in main.js.
 10. Make sure places array is of type ko.observableArray to get the two-way binding working.
 
+Resources:
+
+Safari Books Online: 
+https://www.safaribooksonline.com/library/view/knockoutjs/9781491914298/ch05.html

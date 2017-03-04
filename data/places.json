@@ -6,7 +6,8 @@
       "location": {
         "lat": 43.075617,
         "lng": -89.382206
-      }
+      },
+      "yelp_business_id": "graze-madison"
     },
     {
       "type": "fun",
@@ -14,7 +15,17 @@
       "location": {
         "lat": 43.076674,
         "lng": -89.384438
-      }
+      },
+      "yelp_business_id": "madison-childrens-museum-madison"
+    },
+    {
+      "type": "stadium",
+      "name": "Camp Randall Stadium",
+      "location": {
+        "lat": 43.069897,
+        "lng": -89.412772
+      },
+      "yelp_business_id": "camp-randall-stadium-madison-2"
     }
   ]
 }
