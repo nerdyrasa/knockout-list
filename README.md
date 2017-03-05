@@ -17,3 +17,10 @@ Resources:
 
 Safari Books Online: 
 https://www.safaribooksonline.com/library/view/knockoutjs/9781491914298/ch05.html
+
+
+safari books online--KnockoutJS Blueprints: Chapter 1, Filters and product details 
+
+1. Add a new observable to keep the selected category and a new array to keep the list of the category names; add "all" value using the optionsCaption binding handler
+2. Add a new observable to keep the selected name.
+3. Create computed observable to retrun the array of categories based on the selected category and the list of categories.

@@ -4,12 +4,61 @@
 var app = window.app || {};
 app.placeViewModel = (function (ko, db) {
   "use strict";
+
+
   var me = {
-    places: ko.observableArray([]),
+    places: ko.observableArray([]),   // main array
+
+    query: ko.observable(""),
+
+    filteredPlaces: undefined,
+    selectedCategory: ko.observable(),
+    selectedName: ko.observable(''),
+    categories: undefined,
+
     numberOfClicks: ko.observable(0),
     incrementClickCounter: incrementClickCounter,
     init: init
   };
+
+  function filteredPlaces() {
+    ko.computed(function () {
+      var filter = me.query().toLowerCase();
+
+      if (!filter) {
+        return me.places();
+      } else {
+        return ko.utils.arrayFilter(me.places(), function (item) {
+          return item.name().toLowerCase().indexOf(filter) !== -1;
+        });
+      }
+    });
+  }
+
+
+  me.categories = ko.computed(function(){
+    var results = this.places(),
+        filterByCategory = this.selectedCategory();
+
+    console.log("filterByCategory = ", filterByCategory);
+    if (filterByCategory) {
+      results = ko.utils.arrayFilter(results, function(category){
+        console.log("match " + category.type + ", " + filterByCategory);
+
+        return category.type === filterByCategory;
+      });
+    }
+    console.log("results = ", results);
+    return results;
+  }, me);
+
+  me.categoryName = ko.computed(function(){
+    var results = ko.utils.arrayMap(this.places(), function(category){
+      return category.type;
+    });
+    return results;
+  }, me);
+
 
   function init() {
     db.getPlaces(function (data) {
@@ -22,7 +71,7 @@ app.placeViewModel = (function (ko, db) {
       });
       me.places(a);
       console.log("a = ", a);
-      console.log("places = ", me.places);
+      console.log("places = ", me.places()); // remember to unwrap observable using parentheses
     });
   }
 
