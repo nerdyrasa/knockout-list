@@ -56,9 +56,14 @@ app.placeViewModel = (function (ko, db) {
     var results = ko.utils.arrayMap(this.places(), function(category){
       return category.type;
     });
-    return results;
+    return results.filter( onlyUnique );
   }, me);
 
+  // http://stackoverflow.com/questions/1960473/unique-values-in-an-array
+
+  function onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+  }
 
   function init() {
     db.getPlaces(function (data) {
