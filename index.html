@@ -17,7 +17,7 @@
                     data-bind="options: categoryName, optionsCaption: 'All', value: selectedCategory"
                     name="place-category" id="place-category" class="form-control"></select></div>
 
-            <!-- ko foreach: categories -->
+            <!-- ko foreach: placesFilteredByCategory -->
             <a href="#" class="list-group-item" data-bind="text: name,
                                  event: { click: $parent.processClickOnListItem }">
             </a>

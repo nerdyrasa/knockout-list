@@ -9,8 +9,8 @@ app.placeViewModel = (function (ko, db) {
     places: ko.observableArray([]),   // main array
 
     selectedCategory: ko.observable(),
-    selectedName: ko.observable(''),
-    categories: undefined,
+ //   selectedName: ko.observable(''),
+    placesFilteredByCategory: undefined,
 
     numberOfClicks: ko.observable(0),
     processClickOnListItem: processClickOnListItem,
@@ -20,7 +20,7 @@ app.placeViewModel = (function (ko, db) {
 
 
 
-  me.categories = ko.computed(function(){
+  me.placesFilteredByCategory = ko.computed(function(){
     var results = this.places(),
         filterByCategory = this.selectedCategory();
 
