@@ -54,7 +54,7 @@ app.placeViewModel = (function (ko, db) {
     db.getPlaces(function (data) {
       var a = [];
       ko.utils.arrayForEach(data || [], function (item) {
-        a.push(new app.Place(item.type, item.name, item.location));
+        a.push(new app.Place(item.type, item.name, item.location, item.yelp_business_id));
       });
       me.places(a);
       console.log("places = ", me.places()); // remember to unwrap observable using parentheses
