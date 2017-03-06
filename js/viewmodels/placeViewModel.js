@@ -36,7 +36,7 @@ app.placeViewModel = (function (ko, db) {
         return category.type === filterByCategory;
       });
     }
-    console.log("results = ", results);
+    //console.log("results = ", results);
     return results;
   }, me);
 
