@@ -1,7 +1,7 @@
 {
   "places": [
     {
-      "type": "food",
+      "type": "Food",
       "name": "Graze",
       "location": {
         "lat": 43.075617,
@@ -10,7 +10,25 @@
       "yelp_business_id": "graze-madison"
     },
     {
-      "type": "fun",
+      "type": "Food",
+      "name": "Dotty Dumpling's Dowry",
+      "location": {
+        "lat": 43.072829,
+        "lng": -89.401329
+      },
+      "yelp_business_id": "dotty-dumplings-dowry-madison"
+    },
+    {
+      "type": "Food",
+      "name": "Paisan's Restaurant",
+      "location": {
+        "lat": 43.070682,
+        "lng": -89.383026
+      },
+      "yelp_business_id": "paisans-madison"
+    },
+    {
+      "type": "Attraction",
       "name": "Madison Children's Museum",
       "location": {
         "lat": 43.076674,
@@ -19,7 +37,7 @@
       "yelp_business_id": "madison-childrens-museum-madison"
     },
     {
-      "type": "stadium",
+      "type": "Attraction",
       "name": "Camp Randall Stadium",
       "location": {
         "lat": 43.069897,
