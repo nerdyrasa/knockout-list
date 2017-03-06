@@ -10,6 +10,8 @@ app.placeViewModel = (function (ko, db) {
   var me = {
     places: ko.observableArray([]),
 
+    markers: [],
+
     selectedCategory: ko.observable(),
 
     placesFilteredByCategory: undefined,
@@ -17,7 +19,11 @@ app.placeViewModel = (function (ko, db) {
     processClickOnListItem: processClickOnListItem,
 
     init: init
+
+
+
   };
+
 
   me.placesFilteredByCategory = ko.computed(function () {
     var results = this.places(),
@@ -53,11 +59,15 @@ app.placeViewModel = (function (ko, db) {
   function init() {
     db.getPlaces(function (data) {
       var a = [];
+
       ko.utils.arrayForEach(data || [], function (item) {
         a.push(new app.Place(item.type, item.name, item.location, item.yelp_business_id));
+        me.markers.push(new app.Place(item.type, item.name, item.location, item.yelp_business_id) );
       });
       me.places(a);
-      console.log("places = ", me.places()); // remember to unwrap observable using parentheses
+
+      console.log("markers = ", me.markers);
+
     });
   }
 
