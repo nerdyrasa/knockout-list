@@ -8,10 +8,15 @@ app.placeDataContext = (function ($) {
     getPlaces : getPlaces
   };
 
+
+  //http://codereview.stackexchange.com/questions/45541/wait-until-all-files-are-loaded-asynchronously-then-run-code
+
   function getPlaces(callback){
     if ($.isFunction(callback)){
       $.getJSON('data/places.json', function(data){
         callback(data.places);
+      }).done( function() {
+        console.log("loaded");
       });
     }
   }

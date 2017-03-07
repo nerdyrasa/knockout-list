@@ -20,8 +20,6 @@ app.placeViewModel = (function (ko, db) {
 
     init: init
 
-
-
   };
 
 
@@ -66,7 +64,7 @@ app.placeViewModel = (function (ko, db) {
       });
       me.places(a);
 
-      console.log("markers = ", me.markers);
+      console.log("done loading markers = ", me.markers);
 
     });
   }
