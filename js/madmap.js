@@ -13,7 +13,8 @@ app.madMap = (function () {
     markersInfo : [],
     getYelpInfo : getYelpInfo,
     filterByCategory : filterByCategory,
-    triggerMapEvent: triggerMapEvent
+    triggerMapEvent: triggerMapEvent,
+    showAllMapMarkers: showAllMapMarkers
   };
 
   function initMap() {
@@ -118,11 +119,17 @@ app.madMap = (function () {
     for (var i = 0; i < me.markersInfo.length; i++) {
       // This will hide the markers, not delete them
 
-      if (me.markersInfo[i].type === category) {
+      if ( me.markersInfo[i].type === category ) {
         me.markersInfo[i].marker.setMap(me.map);
       } else {
         me.markersInfo[i].marker.setMap(null);
       }
+    }
+  }
+
+  function showAllMapMarkers() {
+    for (var i = 0; i < me.markersInfo.length; i++) {
+        me.markersInfo[i].marker.setMap(me.map);
     }
   }
 

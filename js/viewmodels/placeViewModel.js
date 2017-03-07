@@ -35,12 +35,17 @@ app.placeViewModel = (function (ko, db) {
       });
     }
 
+    console.log("filter by cat - ", filterByCategory);
 
+
+    // if filterByCategory is undefined but placesFilterByCategory is defined, then display all the markers
 
     // trigger map update
     if (filterByCategory) {
       console.log("filter by category = ", filterByCategory);
       app.madMap.filterByCategory(filterByCategory);
+    } else if (me.placesFilteredByCategory) {
+      app.madMap.showAllMapMarkers();
     }
 
     //console.log("results = ", results);
