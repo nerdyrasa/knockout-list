@@ -34,6 +34,15 @@ app.placeViewModel = (function (ko, db) {
         return category.type === filterByCategory;
       });
     }
+
+
+
+    // trigger map update
+    if (filterByCategory) {
+      console.log("filter by category = ", filterByCategory);
+      app.madMap.filterByCategory(filterByCategory);
+    }
+
     //console.log("results = ", results);
     return results;
   }, me);
@@ -73,6 +82,10 @@ app.placeViewModel = (function (ko, db) {
   function processClickOnListItem(place) {
 
     console.log("clicked on  ", place.name + " in the list.");
+
+    console.log('place = ', place);
+
+    app.madMap.triggerMapEvent(place.id);
 
   }
 

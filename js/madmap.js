@@ -10,7 +10,10 @@ app.madMap = (function () {
     markers: [],
     initMap: initMap,
     initMarkers : initMarkers,
-    markerInfo : {}
+    markersInfo : [],
+    getYelpInfo : getYelpInfo,
+    filterByCategory : filterByCategory,
+    triggerMapEvent: triggerMapEvent
   };
 
   function initMap() {
@@ -24,9 +27,11 @@ app.madMap = (function () {
 
   }
 
+  var largeInfoWindow = undefined;
+
   function initMarkers(locations) {
 
-    var largeInfoWindow = new google.maps.InfoWindow();
+    largeInfoWindow = new google.maps.InfoWindow();
 
     var bounds = new google.maps.LatLngBounds();
 
@@ -48,20 +53,36 @@ app.madMap = (function () {
       var markerInfo = { "type" : locations[i].type };
       me.markers.push(marker);
 
+      var mI = { "marker": marker,
+        "type": locations[i].type};
+
+      console.log("mI = ", mI);
+
+      var num = mI;
+
+      me.markersInfo.push( mI );
       // me.markerInfo
       // bounds.extend(marker.position);
 
-      marker.addListener('click', function () {
+      //elem.addEventListener('click', (function(numCopy) {
+      //  return function() {
+      //    alert(numCopy)
+      //  };
+      //})(num));
 
-        console.log("this is ", this);
-        populateInfoWindow(this, largeInfoWindow);
 
-        // open the list
-        // TODO: highlight the corresponding list item
-        // document.getElementById('left-nav').click();
-        console.log("clicked on marker");
+      marker.addListener('click', (function (numCopy) {
 
-      });
+        return function() {
+          console.log("this is ", this);
+          populateInfoWindow(this, largeInfoWindow, numCopy);
+
+          // open the list
+          // TODO: highlight the corresponding list item
+          // document.getElementById('left-nav').click();
+          console.log("clicked on marker");
+        };
+      })(num));
 
       // showMarkers();
     }
@@ -69,33 +90,58 @@ app.madMap = (function () {
 
   function getYelpInfo() {
 
-
   }
 
   function showMarkers() {
     var bounds = new google.maps.LatLngBounds();
     for (var i = 0; i < me.markers.length; i++) {
-      me.markers[i].setMap(me.map);
-      bounds.extend(me.markers[i].position);
+      me.markersInfo[i].markers.setMap(me.map);
+      bounds.extend(me.markersInfo[i].markers.position);
     }
     me.map.fitBounds(bounds);
     console.log(me.map.zoom);
   }
 
   function hideMarkers() {
-    for (var i = 0; i < markers.length; i++) {
-
+    for (var i = 0; i < me.markersInfo.length; i++) {
       // This will hide the markers, not delete them
-      me.markers[i].setMap(null);
-
+      me.markersInfo[i].markers.setMap(null);
     }
   }
 
-  function populateInfoWindow(marker, infowindow) {
+  function filterByCategory(category) {
+
+    console.log("category is ", category);
+
+    console.log("me.markersInfo ", me.markersInfo);
+
+    for (var i = 0; i < me.markersInfo.length; i++) {
+      // This will hide the markers, not delete them
+
+      if (me.markersInfo[i].type === category) {
+        me.markersInfo[i].marker.setMap(me.map);
+      } else {
+        me.markersInfo[i].marker.setMap(null);
+      }
+    }
+  }
+
+  function triggerMapEvent(placeId) {
+
+    console.log("trigger Map Event ", me.markersInfo[placeId]);
+
+    populateInfoWindow(me.markersInfo[placeId].marker, largeInfoWindow, me.markersInfo[placeId]);
+
+  }
+
+  function populateInfoWindow(marker, infowindow, markerInfo) {
+
+    console.log("mI = ", markerInfo);
+
     // Check to make sure the info window is not already opened on this marker
     if (infowindow.marker != marker) {
       infowindow.marker = marker;
-      infowindow.setContent('<div>' + marker.title + '</div>');
+      infowindow.setContent('<div><h1>' + marker.title + "</h1><p>" + markerInfo.type + '</p></div>');
       infowindow.open(me.map, marker);
       // make sure the marker property is cleared if the infowindow is closed
       infowindow.addListener('closeclick', function () {

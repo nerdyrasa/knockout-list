@@ -1,3 +1,8 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+}
+
 #place-category-label {
     margin-top: 20px;
 }

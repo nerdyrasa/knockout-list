@@ -27,7 +27,7 @@ $.getJSON('data/places.json')
       yelpId = locations[i].yelp_business_id;
       type = locations[i].type;
 
-      place = new app.Place(type, title, position, yelpId);
+      place = new app.Place(type, title, position, yelpId, i);
       app.placeViewModel.places.push(place);
       app.placeViewModel.markers.push(place);
 
