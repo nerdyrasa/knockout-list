@@ -35,6 +35,11 @@ app.placeViewModel = (function (ko, db) {
       });
     }
 
+    // close any info windows that are opened
+    //if (app.madMap) {
+    //  app.madMap.clearInfoWindow();
+    //}
+
     console.log("filter by cat - ", filterByCategory);
 
 

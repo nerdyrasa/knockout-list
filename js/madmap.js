@@ -14,7 +14,8 @@ app.madMap = (function () {
     getYelpInfo : getYelpInfo,
     filterByCategory : filterByCategory,
     triggerMapEvent: triggerMapEvent,
-    showAllMapMarkers: showAllMapMarkers
+    showAllMapMarkers: showAllMapMarkers,
+    clearInfoWindow: clearInfoWindow
   };
 
   function initMap() {
@@ -91,6 +92,12 @@ app.madMap = (function () {
 
   function getYelpInfo() {
 
+    console.log("get Yelp Info = me.markersInfo", me.markersInfo);
+
+    app.yelpData.getYelpInfo('paisans-madison');
+    //console.log("Call to get yelp ", test);
+
+    console.log("yelp Data = ", app.yelpData.yelpRatings);
   }
 
   function showMarkers() {
@@ -114,6 +121,8 @@ app.madMap = (function () {
 
     console.log("category is ", category);
 
+    me.clearInfoWindow();
+
     console.log("me.markersInfo ", me.markersInfo);
 
     for (var i = 0; i < me.markersInfo.length; i++) {
@@ -128,6 +137,9 @@ app.madMap = (function () {
   }
 
   function showAllMapMarkers() {
+
+    // me.clearInfoWindow();
+
     for (var i = 0; i < me.markersInfo.length; i++) {
         me.markersInfo[i].marker.setMap(me.map);
     }
@@ -157,6 +169,14 @@ app.madMap = (function () {
         infowindow.marker = null;
       })
     }
+  }
+
+
+  function clearInfoWindow() {
+
+    console.log("clearing infor window...");
+    largeInfoWindow.setMarker = null;
+    largeInfoWindow.marker = null;
   }
 
   return me;
