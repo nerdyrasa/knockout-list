@@ -1,6 +1,6 @@
 var app = window.app || {};
 app.yelpData = (function ($) {
-  "use strict";
+  'use strict';
   var me = {
     getYelpInfo: getYelpInfo,
     yelpRatings: {},
@@ -10,12 +10,12 @@ app.yelpData = (function ($) {
   function loadYelpRatings() {
 
     console.log("Making api request for Yelp Ratings...")
-    for (var i = 0; i < app.placeViewModel.markers.length; i++) {
-      console.log("yelp id = ", app.placeViewModel.places()[i].yelpID);
-      me.getYelpInfo(app.placeViewModel.places()[i].yelpID);
+
+    var places = app.placeViewModel.places();
+    for (var i = 0; i < places.length; i++) {
+      console.log("yelp id = ", places[i].yelpID);
+      me.getYelpInfo(places[i].yelpID);
     }
-
-
   }
 
   function getYelpInfo(yelpId) {
@@ -28,8 +28,6 @@ app.yelpData = (function ($) {
       YELP_TOKEN = "uOEA_bV6OnwIlsQ2Am2vt-cy8Agjmt11", // goes into parameters variable
       YELP_KEY_SECRET = "eWwJXkpiSzV83uz-oetgkaZEt6M",  // goes into oauthSignature.generate() method
       YELP_TOKEN_SECRET = "FSyNzwQFbBtId5RE4By7Ziy2mIU"; // goes into oauthSignature.generate() method
-
-    //console.log("yelp url = ", yelp_url);
 
     var parameters = {
       oauth_consumer_key: YELP_KEY,
@@ -50,11 +48,9 @@ app.yelpData = (function ($) {
       url: yelp_url,
       data: parameters,
       cache: true,
-      dataType: 'jsonp',
+      dataType: 'jsonp'
     }).done(function (response) {
-      //document.getElementById('yelpRating').src = response.rating_img_url;
       console.log("response = " +  response.rating_img_url + " yelp url = " + yelp_url);
-      //me.yelpRatings.push({ "yelp_id": yelpId, "rating": response.rating_img_url } );
       me.yelpRatings[yelpId] = { "rating": response.rating_img_url,
                                  "url": response.mobile_url};
 
@@ -66,7 +62,7 @@ app.yelpData = (function ($) {
       console.log(yelp_url);
       console.dir(response);
     });
-  };
+  }
 
   return me;
 })(jQuery);

@@ -7,12 +7,11 @@ app.madMap = (function () {
   "use strict";
   var me = {
     map: undefined,
-    markers: [],
+    //   markers: [],
     initMap: initMap,
-    initMarkers : initMarkers,
-    markersInfo : [],
-    getYelpInfo : getYelpInfo,
-    filterByCategory : filterByCategory,
+    initMarkers: initMarkers,
+    getYelpInfo: getYelpInfo,
+    filterByCategory: filterByCategory,
     triggerMapEvent: triggerMapEvent,
     showAllMapMarkers: showAllMapMarkers,
     clearInfoWindow: clearInfoWindow
@@ -31,7 +30,9 @@ app.madMap = (function () {
 
   var largeInfoWindow = undefined;
 
-  function initMarkers(locations) {
+  function initMarkers() {
+
+    var locations = app.placeViewModel.places();
 
     largeInfoWindow = new google.maps.InfoWindow();
 
@@ -40,10 +41,6 @@ app.madMap = (function () {
     for (var i = 0; i < locations.length; i++) {
       var position = locations[i].location;
       var title = locations[i].name;
-
-      console.log("locations[i] = ", locations[i]);
-      console.log("title = ", title);
-
       var marker = new google.maps.Marker({
         map: me.map,
         position: position,
@@ -51,125 +48,81 @@ app.madMap = (function () {
         animation: google.maps.Animation.DROP,
         id: i
       });
-
-
       if (locations[i].type === "Attraction") {
         marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
       } else {
         marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
       }
 
-      var markerInfo = { "type" : locations[i].type };
-      me.markers.push(marker);
+      //    me.markers.push(marker);
 
-      var mI = { "marker": marker,
+      var markerInfo = {
+        "marker": marker,
         "type": locations[i].type,
         "yelpID": locations[i].yelpID
       };
 
-      console.log("mI = ", mI);
+      locations[i].marker = marker;
 
-      var num = mI;
+//      var num = markerInfo;
 
-      me.markersInfo.push( mI );
-      // me.markerInfo
-      // bounds.extend(marker.position);
+      marker.addListener('click', (function (location) {
 
-      //elem.addEventListener('click', (function(numCopy) {
-      //  return function() {
-      //    alert(numCopy)
-      //  };
-      //})(num));
-
-
-      marker.addListener('click', (function (numCopy) {
-
-        return function() {
+        return function () {
           console.log("this is ", this);
-          populateInfoWindow(this, largeInfoWindow, numCopy);
+          populateInfoWindow(this, largeInfoWindow, location);
 
           // open the list
           // TODO: highlight the corresponding list item
           // document.getElementById('left-nav').click();
           console.log("clicked on marker");
         };
-      })(num));
+      })(locations[i]));
 
-      // showMarkers();
     }
   }
 
   function getYelpInfo() {
 
-
     app.yelpData.loadYelpRatings();
-    //console.log("get Yelp Info = me.markersInfo", me.markersInfo);
-    //
-    //
-    //for (var i = 0; i < app.placeViewModel.markers.length; i++) {
-    //  console.log("yelp id = ", app.placeViewModel.places()[i].yelpID);
-    //  app.yelpData.getYelpInfo(app.placeViewModel.places()[i].yelpID);
-    //}
-
 
   }
 
-  function showMarkers() {
-    var bounds = new google.maps.LatLngBounds();
-    for (var i = 0; i < me.markers.length; i++) {
-      me.markersInfo[i].markers.setMap(me.map);
-      bounds.extend(me.markersInfo[i].markers.position);
-    }
-    me.map.fitBounds(bounds);
-    console.log(me.map.zoom);
-  }
-
-  function hideMarkers() {
-    for (var i = 0; i < me.markersInfo.length; i++) {
-      // This will hide the markers, not delete them
-      me.markersInfo[i].markers.setMap(null);
-    }
-  }
-
-  function filterByCategory(category) {
+  function filterByCategory(category, places) {
 
     console.log("category is ", category);
 
     me.clearInfoWindow();
 
-    console.log("me.markersInfo ", me.markersInfo);
-
-    for (var i = 0; i < me.markersInfo.length; i++) {
+    for (var i = 0; i < places.length; i++) {
       // This will hide the markers, not delete them
 
-      if ( me.markersInfo[i].type === category ) {
-        me.markersInfo[i].marker.setMap(me.map);
+      if (places[i].type === category) {
+        places[i].marker.setMap(me.map);
       } else {
-        me.markersInfo[i].marker.setMap(null);
+        places[i].marker.setMap(null);
       }
     }
   }
 
-  function showAllMapMarkers() {
+  function showAllMapMarkers(places) {
 
     // me.clearInfoWindow();
 
-    for (var i = 0; i < me.markersInfo.length; i++) {
-        me.markersInfo[i].marker.setMap(me.map);
+    if ( typeof places !== 'undefined' ) {
+      for (var i = 0; i < places.length; i++) {
+        places[i].marker.setMap(me.map);
+      }
     }
   }
 
-  function triggerMapEvent(placeId) {
+  function triggerMapEvent(location) {
 
-    console.log("trigger Map Event ", me.markersInfo[placeId]);
-
-    populateInfoWindow(me.markersInfo[placeId].marker, largeInfoWindow, me.markersInfo[placeId]);
+    populateInfoWindow(location.marker, largeInfoWindow, location);
 
   }
 
   function populateInfoWindow(marker, infowindow, markerInfo) {
-
-    console.log("mI = ", markerInfo);
 
     // Check to make sure the info window is not already opened on this marker
     if (infowindow.marker != marker) {
@@ -177,17 +130,11 @@ app.madMap = (function () {
       // look up the yelp rating if available
 
       var rating = app.yelpData.yelpRatings[markerInfo.yelpID].rating;
-
-      console.log("yelp rating = ", rating);
-
       var yelpUrl = app.yelpData.yelpRatings[markerInfo.yelpID].url;
-
       var imgTag = "<img src = ' " + rating + "' alt='Yelp Rating'/>";
-
       var yelpLink = "<a href='" + yelpUrl + "' target='_blank'><i class='fa fa-yelp'></i>Yelp Reviews</a>";
 
       infowindow.setContent("<div><h1>" + marker.title + "</h1><p>" + markerInfo.type + "</p>" + imgTag + "<span class='yelp-link'>" + yelpLink + "</span></div>");
-
 
 
       infowindow.open(me.map, marker);
@@ -199,7 +146,6 @@ app.madMap = (function () {
       })
     }
   }
-
 
   function clearInfoWindow() {
 

@@ -1,57 +1,54 @@
-// This is a commonly used construct that either assigns app to window.app if it exists or if
+// This is a commonly used construct that either assigns app to window.app if it exists or
 //  if it doesn't exist it creates an empty object
+
 var app = window.app || {};
 
 // Using the revealing module pattern here
 
-app.placeViewModel = (function (ko, db) {
-  "use strict";
+app.placeViewModel = (function (ko) {
+  'use strict';
 
   var me = {
     places: ko.observableArray([]),
-
-    markers: [],
-
     selectedCategory: ko.observable(),
-
     placesFilteredByCategory: undefined,
-
     processClickOnListItem: processClickOnListItem,
-
     init: init
 
   };
-
 
   me.placesFilteredByCategory = ko.computed(function () {
     var results = this.places(),
       filterByCategory = this.selectedCategory();
 
+    if (typeof filterByCategory === 'undefined') {
+      console.log("filterByCategory is undefined!!!!")
+    }
+
     if (filterByCategory) {
+      console.log('???');
       results = ko.utils.arrayFilter(results, function (category) {
         console.log("match " + category.type + ", " + filterByCategory);
 
         return category.type === filterByCategory;
       });
+
+      app.madMap.filterByCategory(filterByCategory, me.places());
     }
-
-    // close any info windows that are opened
-    //if (app.madMap) {
-    //  app.madMap.clearInfoWindow();
-    //}
-
-    console.log("filter by cat - ", filterByCategory);
-
 
     // if filterByCategory is undefined but placesFilterByCategory is defined, then display all the markers
+    if (typeof filterByCategory === 'undefined' && results.length > 0 ) {
+      console.log("results = ", results);
+
+      //app.madMap.showAllMapMarkers(results);
+    }
 
     // trigger map update
-    if (filterByCategory) {
-      console.log("filter by category = ", filterByCategory);
-      app.madMap.filterByCategory(filterByCategory);
-    } else if (me.placesFilteredByCategory) {
-      app.madMap.showAllMapMarkers();
-    }
+    // All markers are shown initially. If I filter by a category, then go back to all, all markers are not showing.
+    // TODO: When all is selected, show all markers.
+    //} else if (me.placesFilteredByCategory) {
+    //  app.madMap.showAllMapMarkers(me.placesFilteredByCategory());
+    //}
 
     //console.log("results = ", results);
     return results;
@@ -101,4 +98,4 @@ app.placeViewModel = (function (ko, db) {
 
   return me;
 
-})(ko, app.placeDataContext);
+})(ko);

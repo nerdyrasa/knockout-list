@@ -29,14 +29,14 @@ $.getJSON('data/places.json')
 
       place = new app.Place(type, title, position, yelpId, i);
       app.placeViewModel.places.push(place);
-      app.placeViewModel.markers.push(place);
+      //app.placeViewModel.markers.push(place);
 
     }
-    return app.placeViewModel.markers;
+    //return app.placeViewModel.markers;
   })
-  .then(function (markers) {
+  .then(function () {
     console.log("loaded");
-    app.madMap.initMarkers( markers );
+    app.madMap.initMarkers();
 
     // This establishes two way binding between the view and viewmodel.
     // where does this go?
