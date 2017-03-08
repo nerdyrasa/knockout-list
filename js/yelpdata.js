@@ -51,7 +51,6 @@ app.yelpData = (function ($) {
       data: parameters,
       cache: true,
       dataType: 'jsonp',
-      jsonpCallback: 'cb'
     }).done(function (response) {
       //document.getElementById('yelpRating').src = response.rating_img_url;
       console.log("response = " +  response.rating_img_url + " yelp url = " + yelp_url);
