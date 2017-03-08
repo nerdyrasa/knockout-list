@@ -52,11 +52,20 @@ app.madMap = (function () {
         id: i
       });
 
+
+      if (locations[i].type === "Attraction") {
+        marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+      } else {
+        marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
+      }
+
       var markerInfo = { "type" : locations[i].type };
       me.markers.push(marker);
 
       var mI = { "marker": marker,
-        "type": locations[i].type};
+        "type": locations[i].type,
+        "yelpID": locations[i].yelpID
+      };
 
       console.log("mI = ", mI);
 
@@ -165,7 +174,22 @@ app.madMap = (function () {
     // Check to make sure the info window is not already opened on this marker
     if (infowindow.marker != marker) {
       infowindow.marker = marker;
-      infowindow.setContent('<div><h1>' + marker.title + "</h1><p>" + markerInfo.type + '</p></div>');
+      // look up the yelp rating if available
+
+      var rating = app.yelpData.yelpRatings[markerInfo.yelpID].rating;
+
+      console.log("yelp rating = ", rating);
+
+      var yelpUrl = app.yelpData.yelpRatings[markerInfo.yelpID].url;
+
+      var imgTag = "<img src = ' " + rating + "' alt='Yelp Rating'/>";
+
+      var yelpLink = "<a href='" + yelpUrl + "' target='_blank'><i class='fa fa-yelp'></i>Yelp Reviews</a>";
+
+      infowindow.setContent("<div><h1>" + marker.title + "</h1><p>" + markerInfo.type + "</p>" + imgTag + "<span class='yelp-link'>" + yelpLink + "</span></div>");
+
+
+
       infowindow.open(me.map, marker);
       // make sure the marker property is cleared if the infowindow is closed
       infowindow.addListener('closeclick', function () {

@@ -3,7 +3,7 @@ app.yelpData = (function ($) {
   "use strict";
   var me = {
     getYelpInfo: getYelpInfo,
-    yelpRatings: [],
+    yelpRatings: {},
     loadYelpRatings: loadYelpRatings
   };
 
@@ -54,7 +54,9 @@ app.yelpData = (function ($) {
     }).done(function (response) {
       //document.getElementById('yelpRating').src = response.rating_img_url;
       console.log("response = " +  response.rating_img_url + " yelp url = " + yelp_url);
-      me.yelpRatings.push({ "yelp_id": yelpId, "rating": response.rating_img_url } );
+      //me.yelpRatings.push({ "yelp_id": yelpId, "rating": response.rating_img_url } );
+      me.yelpRatings[yelpId] = { "rating": response.rating_img_url,
+                                 "url": response.mobile_url};
 
       console.log(me.yelpRatings);
     }).fail(function (response) {

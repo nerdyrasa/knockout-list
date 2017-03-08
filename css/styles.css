@@ -11,3 +11,8 @@ body {
     width: 700px;
     height: 500px;
 }
+
+.yelp-link {
+    display: inline-block;
+    margin-left: 20px;
+}
