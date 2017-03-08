@@ -92,12 +92,17 @@ app.madMap = (function () {
 
   function getYelpInfo() {
 
-    console.log("get Yelp Info = me.markersInfo", me.markersInfo);
 
-    app.yelpData.getYelpInfo('paisans-madison');
-    //console.log("Call to get yelp ", test);
+    app.yelpData.loadYelpRatings();
+    //console.log("get Yelp Info = me.markersInfo", me.markersInfo);
+    //
+    //
+    //for (var i = 0; i < app.placeViewModel.markers.length; i++) {
+    //  console.log("yelp id = ", app.placeViewModel.places()[i].yelpID);
+    //  app.yelpData.getYelpInfo(app.placeViewModel.places()[i].yelpID);
+    //}
 
-    console.log("yelp Data = ", app.yelpData.yelpRatings);
+
   }
 
   function showMarkers() {

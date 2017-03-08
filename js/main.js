@@ -45,12 +45,12 @@ $.getJSON('data/places.json')
   })
   .then( function () {
     // now get the yelp info ???
-    app.madMap.getYelpInfo();
+    app.yelpData.loadYelpRatings();
 
 
   })
   .fail( function(){
-    console.log("something failed");
+    console.log("something failed in main");
   })
 
 ;

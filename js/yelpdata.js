@@ -3,8 +3,20 @@ app.yelpData = (function ($) {
   "use strict";
   var me = {
     getYelpInfo: getYelpInfo,
-    yelpRatings: []
+    yelpRatings: [],
+    loadYelpRatings: loadYelpRatings
   };
+
+  function loadYelpRatings() {
+
+    console.log("Making api request for Yelp Ratings...")
+    for (var i = 0; i < app.placeViewModel.markers.length; i++) {
+      console.log("yelp id = ", app.placeViewModel.places()[i].yelpID);
+      me.getYelpInfo(app.placeViewModel.places()[i].yelpID);
+    }
+
+
+  }
 
   function getYelpInfo(yelpId) {
 
@@ -17,7 +29,7 @@ app.yelpData = (function ($) {
       YELP_KEY_SECRET = "eWwJXkpiSzV83uz-oetgkaZEt6M",  // goes into oauthSignature.generate() method
       YELP_TOKEN_SECRET = "FSyNzwQFbBtId5RE4By7Ziy2mIU"; // goes into oauthSignature.generate() method
 
-    var yelp_url = 'https://api.yelp.com/v2/business/' + yelpId;
+    //console.log("yelp url = ", yelp_url);
 
     var parameters = {
       oauth_consumer_key: YELP_KEY,
@@ -29,23 +41,29 @@ app.yelpData = (function ($) {
       callback: 'cb'
     };
 
-    var encodedSignature = oauthSignature.generate('GET', yelp_url, parameters,
+    var yelp_url = 'https://api.yelp.com/v2/business/' + yelpId;
+
+    parameters.oauth_signature = oauthSignature.generate('GET', yelp_url, parameters,
       YELP_KEY_SECRET, YELP_TOKEN_SECRET);
 
-    parameters.oauth_signature = encodedSignature;
     $.ajax({
       url: yelp_url,
       data: parameters,
       cache: true,
-      dataType: 'jsonp',
+      dataType: 'jsonp json text',
       jsonpCallback: 'cb'
     }).done(function (response) {
       //document.getElementById('yelpRating').src = response.rating_img_url;
-      console.log("response = ", response.rating_img_url);
-      me.yelpRatings.push(response.rating_img_url);
+      console.log("response = " +  response.rating_img_url + " yelp url = " + yelp_url);
+      me.yelpRatings.push({ "yelp_id": yelpId, "rating": response.rating_img_url } );
+
+      console.log(me.yelpRatings);
     }).fail(function (response) {
       // If the ajax call fails, then the yelp data will not be displayed.
-      console.log("Data could not be retrieved from Yelp API");
+
+      console.log("Ajax called failed: Data could not be retrieved from Yelp API");
+      console.log(yelp_url);
+      console.dir(response);
     });
   };
 
